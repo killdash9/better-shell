@@ -31,10 +31,10 @@ Installation
 ------------
 
 I'm hoping to get this into melpa when I have time.  Here are my key bindings:
-
-    (global-set-key (kbd "C-'") 'better-shell-shell)
-    (global-set-key (kbd "C-;") 'better-shell-remote-open)
-
+```lisp
+(global-set-key (kbd "C-'") 'better-shell-shell)
+(global-set-key (kbd "C-;") 'better-shell-remote-open)
+```
 <!--
 
 [![MELPA](https://melpa.org/packages/better-shell-badge.svg)](https://melpa.org/#/better-shell)
