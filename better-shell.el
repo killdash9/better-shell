@@ -160,4 +160,4 @@ directory."
       (better-shell-existing-shell t))))
 
 (provide 'better-shell)
-;;; better-shell ends here
+;;; better-shell.el ends here
