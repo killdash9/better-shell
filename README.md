@@ -17,7 +17,7 @@ running a command).  It first looks for an idle shell that is already
 in the buffer's directory.  If none is found, it looks for another
 idle shell on the same host as the buffer.  If one is found, that
 shell will be chosen and automatically placed into the buffer's
-directory with a \"cd\" command.  Otherwise, a new shell is created on
+directory with a `cd` command.  Otherwise, a new shell is created on
 the same host and in the same directory as the buffer.
 
 `better-shell-remote-open`

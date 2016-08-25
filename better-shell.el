@@ -1,5 +1,5 @@
 ;;; better-shell.el --- Better shell management
-;; Copyright (C) 2015 Russell Black
+;; Copyright (C) 2016 Russell Black
 
 ;; Author: Russell Black (killdash9@github)
 ;; Keywords: convenience
@@ -26,7 +26,7 @@
 ;; 
 ;; better-shell-shell -- cycle through current shells, creating one if
 ;; no shell exists.  With prefix arg, pop to or create a shell in
-;; the same directory as the current buffer.
+;; the same directory (and same host) as the current buffer.
 ;; 
 ;; better-shell-remote-open -- open a shell on a remote server
 
