@@ -6,6 +6,7 @@
 ;; URL: https://github.com/killdash9/better-shell
 ;; Created: 1st Mar 2016
 ;; Version: 1.0
+;; Package-Requires: ((cl-lib "0.5"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -31,7 +32,7 @@
 ;; better-shell-remote-open -- open a shell on a remote server
 
 ;;; Code:
-(eval-when-compile (require 'cl))
+(require 'cl-lib)
 (require 'tramp)
 (require 'shell)
 
