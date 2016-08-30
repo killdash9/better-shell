@@ -30,29 +30,22 @@ enter a new host.
 Installation
 ------------
 
-I'm hoping to get this into melpa when I have time.  Here are my key bindings:
-```lisp
-(global-set-key (kbd "C-'") 'better-shell-shell)
-(global-set-key (kbd "C-;") 'better-shell-remote-open)
-```
-<!--
+### Melpa Installation
 
 [![MELPA](https://melpa.org/packages/better-shell-badge.svg)](https://melpa.org/#/better-shell)
-
-## Melpa Installation ##
 
     M-x package-install RET better-shell RET
 
 Then add key bindings to your config, for example:
+```lisp
+(global-set-key (kbd "C-'") 'better-shell-shell)
+(global-set-key (kbd "C-;") 'better-shell-remote-open)
 
-    (global-set-key (kbd "C-'") 'better-shell-shell)
-    (global-set-key (kbd "C-;") 'better-shell-remote-open)
-
-## `use-package` Installation ##
-
-    (use-package better-shell
-      :ensure t
-      :bind (("C-'" . better-shell-shell)
-             ("C-;" . better-shell-remote-open)))
-
--->
+```
+### `use-package` Installation
+```lisp
+(use-package better-shell
+    :ensure t
+    :bind (("C-'" . better-shell-shell)
+    ("C-;" . better-shell-remote-open)))
+```
