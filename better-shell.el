@@ -129,7 +129,7 @@ created in the buffer's directory."
                  (tramp-get-completion-function "ssh"))))
        (remote-host (completing-read "Remote host: " hosts)))
     (with-temp-buffer
-      (cd (concat "/scp:" remote-host ":"))
+      (cd (concat "/" remote-host ":"))
       (shell (format "*shell/%s*" remote-host)))))
 
 (defun better-shell-existing-shell (&optional pop-to-buffer)
