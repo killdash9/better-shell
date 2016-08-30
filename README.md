@@ -47,5 +47,5 @@ Then add key bindings to your config, for example:
 (use-package better-shell
     :ensure t
     :bind (("C-'" . better-shell-shell)
-    ("C-;" . better-shell-remote-open)))
+           ("C-;" . better-shell-remote-open)))
 ```
