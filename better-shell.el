@@ -100,11 +100,14 @@ created in the buffer's directory."
 
     ;; cd in the shell if needed
     (when (not (string-equal dir (better-shell-default-directory idle-shell)))
-      (with-current-buffer idle-shell
-        (comint-delete-input)
-        (goto-char (point-max))
-        (insert (concat "cd '" dir "'"))
-        (comint-send-input)))
+      (let ((localdir (if (file-remote-p dir)
+                          (with-parsed-tramp-file-name dir nil localname)
+                        (expand-file-name dir))))
+        (with-current-buffer idle-shell
+          (comint-delete-input)
+          (goto-char (point-max))
+          (insert (concat "cd \"" localdir "\""))
+          (comint-send-input))))
 
     ;; now we have an idle shell in the correct directory.  Pop to it.
     (pop-to-buffer idle-shell)))
