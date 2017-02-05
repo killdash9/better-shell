@@ -70,7 +70,7 @@ prompt."
 
 (defun better-shell-idle-shells (remote-host)
   "Return all the buffers with idle shells on REMOTE-HOST.
-If REMOTE-HOST is nil, returns a list of non-remote shells."
+If REMOTE-HOST is nil, returns a list of idle local shells."
   (let ((current-buffer (current-buffer)))
     (cl-remove-if-not
      (lambda (buf)
@@ -108,9 +108,8 @@ created in the buffer's directory."
            ;; make a new shell if there are none
            (shell (generate-new-buffer-name
                    (if (file-remote-p dir)
-                       (format "*shell/%s*"
-                               (tramp-file-name-host
-                                (tramp-dissect-file-name dir)))
+                       (with-parsed-tramp-file-name dir nil
+                         (format "*shell/%s*" host))
                      "*shell*"))))))
 
     ;; cd in the shell if needed
