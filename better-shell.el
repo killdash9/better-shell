@@ -95,6 +95,7 @@ idle shell on the same host as the buffer.  If one is found, that
 shell will be chosen, and automatically placed into the buffer's
 directory with a \"cd\" command.  Otherwise, a new shell is
 created in the buffer's directory."
+  (interactive)
   (let* ((dir default-directory)
          (idle-shell
           (or
