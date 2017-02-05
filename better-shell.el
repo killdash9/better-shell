@@ -38,10 +38,25 @@
 
 (defun better-shell-idle-p (buf)
   "Return t if the shell in BUF is not running something.
-We check to see if the point is after the prompt, which should be
-good enough."
-  (equal '(comint-highlight-prompt)
-         (get-text-property (- (point) 1) 'font-lock-face)))
+When available, use process hierarchy information via pstree for
+local shells.  Otherwise, we ask comint if the point is after a
+prompt."
+  (with-current-buffer buf
+    (let ((comint-says-idle (equal '(comint-highlight-prompt)
+                                   (get-text-property
+                                    (- (point) 1) 'font-lock-face))))
+      (if (file-remote-p default-directory)
+          ;; for remote shells we have to rely on comint
+          comint-says-idle
+        ;; for local shells, we can potentially do better using pgrep
+        (condition-case nil
+            (case (call-process ;; look at the exit code of pgrep -P <pid>
+                   "pgrep" nil nil nil "-P"
+                   (number-to-string (process-id (get-buffer-process buf))))
+              (0 nil) ;; child procxesses found, not idle
+              (1 t)   ;; not running any child processes, it's idle
+              (t comint-says-idle)) ;; anything else, fall back on comint.
+          (error comint-says-idle)))))) ;; comint fallback if execution failed
 
 (defun better-shell-shells ()
   "Return a list of buffers running shells."
