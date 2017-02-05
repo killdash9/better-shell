@@ -135,9 +135,10 @@ created in the buffer's directory."
                      (tramp-get-completion-function "scp"))))
 
 ;;;###autoload
-(defun better-shell-remote-open ()
-  "Prompt for a remote host to connect to, and open a shell there."
-  (interactive)
+(defun better-shell-remote-open (&optional arg)
+  "Prompt for a remote host to connect to, and open a shell
+there.  With prefix argument, get a sudo shell."
+  (interactive "p")
   (let*
       ((hosts
         (cl-reduce 'append
@@ -146,9 +147,18 @@ created in the buffer's directory."
                    (cl-remove nil (mapcar 'cadr (apply (car x) (cdr x)))))
                  (tramp-get-completion-function "ssh"))))
        (remote-host (completing-read "Remote host: " hosts)))
-    (with-temp-buffer
-      (cd (concat "/" remote-host ":"))
-      (shell (format "*shell/%s*" remote-host)))))
+    (if (and arg (= 4 arg))
+        ;; this means sudo
+        (let ((tramp-default-proxies-alist nil))
+          ;; so that you don't get method overrides.  ssh is the only one that works for sudo.
+          (with-temp-buffer
+            (cd (concat "/ssh:" remote-host "|sudo:" remote-host ":"))
+            (shell (format "*shell/sudo:%s*" remote-host))))
+      ;; non-sudo
+      (with-temp-buffer
+        (cd (concat "/" remote-host ":"))
+        (shell (format "*shell/%s*" remote-host))))))
+
 
 (defun better-shell-existing-shell (&optional pop-to-buffer)
   "Next existing shell in the stack.
