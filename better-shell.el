@@ -159,6 +159,34 @@ there.  With prefix argument, get a sudo shell."
         (cd (concat "/" remote-host ":"))
         (shell (format "*shell/%s*" remote-host))))))
 
+;;;###autoload
+(defun better-shell-sudo-here ()
+  "Reopen the current file, directory, or shell as root.  For
+files and dired buffers, the non-sudo buffer is replaced with a
+sudo buffer.  For shells, a sudo shell is opened but the non-sudo
+shell is left in tact."
+  (interactive)
+  (let ((f (expand-file-name (or buffer-file-name default-directory))))
+    (when (string-match-p "\\bsudo:" f) (user-error "Already sudo"))
+    (let ((sudo-f (if (file-remote-p f)
+                      (with-parsed-tramp-file-name f nil
+                        (concat "/ssh:" host "|sudo:" host ":" localname))
+                    (concat "/sudo:localhost:" f)))
+          (tramp-default-proxies-alist nil)
+          ;; so that you don't get method overrides.  ssh is the only one that works for sudo.
+          )
+      (unless f (user-error "No file or default directory in this
+      buffer.  This command can only be used in file buffers,
+      dired buffers, or shell buffers."))
+      (cond ((or buffer-file-name (eq major-mode 'dired-mode))
+             (find-alternate-file sudo-f))
+            ((eq major-mode 'shell-mode)
+             (with-temp-buffer
+               (cd sudo-f)
+               (shell (format "*shell/sudo:%s*"
+                              (with-parsed-tramp-file-name sudo-f nil host)))))
+            (t (message "Can't sudo this buffer"))
+            ))))
 
 (defun better-shell-existing-shell (&optional pop-to-buffer)
   "Next existing shell in the stack.
