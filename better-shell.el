@@ -216,10 +216,8 @@ shell is left in tact."
             (t (message "Can't sudo this buffer"))
             ))))
 
-(defun better-shell-existing-shell (&optional pop-to-buffer)
-  "Next existing shell in the stack.
-If POP-TO-BUFFER is non-nil, pop to the shell.  Otherwise, switch
-to it."
+(defun better-shell-existing-shell ()
+  "Switch to the next existing shell in the stack."
   (interactive)
   ;; rotate through existing shells
   (let* ((shells (better-shell-shells))
@@ -242,7 +240,7 @@ directory."
   (let ((shells (better-shell-shells)))
     (if (or (null shells) (and arg (= 4 arg)))
         (better-shell-for-current-dir)
-      (better-shell-existing-shell t))))
+      (better-shell-existing-shell))))
 
 (provide 'better-shell)
 ;;; better-shell.el ends here
