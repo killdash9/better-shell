@@ -198,7 +198,7 @@ shell is left in tact."
     (when (string-match-p "\\bsudo:" f) (user-error "Already sudo"))
     (let ((sudo-f (if (file-remote-p f)
                       (with-parsed-tramp-file-name f nil
-                        (concat "/ssh:" host "|sudo:" host ":" localname))
+                        (concat "/ssh:" user "@" host "|sudo:" host ":" localname))
                     (concat "/sudo:localhost:" f)))
           (tramp-default-proxies-alist nil)
           ;; so that you don't get method overrides.  ssh is the only one that works for sudo.
