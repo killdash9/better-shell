@@ -184,7 +184,7 @@ there.  With prefix argument, get a sudo shell."
             (shell (format "*shell/sudo:%s*" remote-host))))
       ;; non-sudo
       (with-temp-buffer
-        (cd (concat "/" remote-host ":"))
+        (cd (concat "/" (or tramp-default-method "ssh") ":" remote-host ":"))
         (shell (format "*shell/%s*" remote-host))))))
 
 ;;;###autoload
