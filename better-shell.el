@@ -119,6 +119,12 @@ If REMOTE-HOST is nil, returns a list of idle local shells."
 
 (defun better-shell-for-current-dir ()
   "Find or create a shell in the buffer's directory.
+See `better-shell-for-dir' for details on how shells are found or created."
+  (interactive)
+  (better-shell-for-dir default-directory))
+
+(defun better-shell-for-dir (dir)
+  "Find or create a shell in DIR.
 The shell chosen is guaranteed to be idle (not running another
 command).  It first looks for an idle shell that is already in
 the buffer's directory.  If none is found, it looks for another
@@ -126,23 +132,22 @@ idle shell on the same host as the buffer.  If one is found, that
 shell will be chosen, and automatically placed into the buffer's
 directory with a \"cd\" command.  Otherwise, a new shell is
 created in the buffer's directory."
-  (interactive)
-  (let* ((dir default-directory)
-         (idle-shell
-          (or
-           ;; get currently idle shells, ones with matching directory
-           ;; first.
-           (car (sort
-                 (better-shell-idle-shells
-                  (file-remote-p default-directory))
-                 (lambda (s1 s2)
-                   (string-equal dir (better-shell-default-directory s1)))))
-           ;; make a new shell if there are none
-           (shell (generate-new-buffer-name
-                   (if (file-remote-p dir)
-                       (with-parsed-tramp-file-name dir nil
-                         (format "*shell/%s*" host))
-                     "*shell*"))))))
+  (interactive "D")
+  (let ((idle-shell
+         (or
+          ;; get currently idle shells, ones with matching directory
+          ;; first.
+          (car (sort
+                (better-shell-idle-shells
+                 (file-remote-p default-directory))
+                (lambda (s1 s2)
+                  (string-equal dir (better-shell-default-directory s1)))))
+          ;; make a new shell if there are none
+          (shell (generate-new-buffer-name
+                  (if (file-remote-p dir)
+                      (with-parsed-tramp-file-name dir nil
+                        (format "*shell/%s*" host))
+                    "*shell*"))))))
 
     ;; cd in the shell if needed
     (when (not (string-equal dir (better-shell-default-directory idle-shell)))
@@ -192,10 +197,10 @@ there.  With prefix argument, get a sudo shell."
 
 ;;;###autoload
 (defun better-shell-sudo-here ()
-  "Reopen the current file, directory, or shell as root.  For
-files and dired buffers, the non-sudo buffer is replaced with a
-sudo buffer.  For shells, a sudo shell is opened but the non-sudo
-shell is left in tact."
+  "Reopen the current file, directory, or shell as root.
+For files and dired buffers, the non-sudo buffer is replaced with
+a sudo buffer.  For shells, a sudo shell is opened but the
+non-sudo shell is left in tact."
   (interactive)
   (let ((f (expand-file-name (or buffer-file-name default-directory))))
     (when (string-match-p "\\bsudo:" f) (user-error "Already sudo"))
@@ -208,7 +213,7 @@ shell is left in tact."
           )
       (unless f (user-error "No file or default directory in this
       buffer.  This command can only be used in file buffers,
-      dired buffers, or shell buffers."))
+      dired buffers, or shell buffers"))
       (cond ((or buffer-file-name (eq major-mode 'dired-mode))
              (find-alternate-file sudo-f))
             ((eq major-mode 'shell-mode)
@@ -244,6 +249,15 @@ directory."
     (if (or (null shells) (and arg (= 4 arg)))
         (better-shell-for-current-dir)
       (better-shell-existing-shell))))
+
+;;;###autoload
+(defun better-shell-for-projectile-root ()
+  "Find or create a shell in the projectile root.
+See `better-shell-for-dir' for details on how shells are found or created."
+  (interactive)
+  (unless (fboundp 'projectile-project-root)
+    (error "Projectile does not appear to be installed"))
+  (better-shell-for-dir (projectile-project-root)))
 
 (provide 'better-shell)
 ;;; better-shell.el ends here

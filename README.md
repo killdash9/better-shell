@@ -37,6 +37,13 @@ enter a new host.  With <kbd>C-u</kbd> prefix arg, get sudo shell.
 
 Reopen the current file, directory, or shell as root.
 
+`better-shell-for-projectile-root`
+------------------------------
+
+Like `better-shell-for-current-dir`, except you are taken to the
+projectile root of the current directory, provided you have projectile
+installed.
+
 Installation
 ------------
 
