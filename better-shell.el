@@ -5,7 +5,7 @@
 ;; Keywords: convenience
 ;; URL: https://github.com/killdash9/better-shell
 ;; Created: 1st Mar 2016
-;; Version: 1.2
+;; Version: 1.2.1
 ;; Package-Requires: ((emacs "24.4"))
 
 ;; This program is free software; you can redistribute it and/or modify
