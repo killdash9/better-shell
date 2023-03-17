@@ -94,6 +94,7 @@ prompt."
   (cl-remove-if-not
    (lambda (buf)
      (and
+      (not (s-starts-with? "*Async Shell" (buffer-name buf)))
       (get-buffer-process buf)
       (with-current-buffer buf
         (string-equal major-mode 'shell-mode))))
